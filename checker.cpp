@@ -16,19 +16,8 @@ bool respRate(float respRate)
 }
 
 bool vitalsAreOk(float bpm, float spo2, float respRate) {
-  if(!bpmAreOk(bpm))
-  {
-    return false;
-  }
-  else if(!spo2AreOk(spo2))
-  {
-    return false;
-  }
-  else if(!respRate(respRate))
-  {
-    return false
-  }
-  return true;
+  
+  return(bpmAreOk(bpm) ||spo2AreOk(spo2) || respRate(respRate))
     
 }
 
