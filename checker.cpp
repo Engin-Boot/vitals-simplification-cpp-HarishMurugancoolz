@@ -36,7 +36,7 @@ class vital
     bool isInsideLimit(float,float ,float );
     bool isLow(float,float);
     bool isHigh(float,float);
-    bool vitalsAreOk(float, float , float);
+    void vitalsAreOk(float, float , float);
     void bpmCheck(Alert*,float );
     void spo2Check(Alert*,float );
     void respRateCheck(Alert*,float );
@@ -90,11 +90,11 @@ void vital::respRateCheck(Alert *a,float respRate)
     }
 }
 
-bool vital::isLow(float value,float lowerLimit);
+bool vital::isLow(float value,float lowerLimit)
 {
     return(value<=lowerLimit);
 }
-bool vital::isHigh(float value,float upperLimit);
+bool vital::isHigh(float value,float upperLimit)
 {
     return(value>=upperLimit);
 }
@@ -104,7 +104,7 @@ bool vital::isInsideLimit(float value,float lowerLimit,float upperLimit)
   
 }
 
-bool vital::vitalsAreOk(float bpm, float spo2, float respRate) {
+void vital::vitalsAreOk(float bpm, float spo2, float respRate) {
   
   Alert *a=new AlertWithSMS;
   bpmCheck(a,bpm);
