@@ -27,57 +27,58 @@ public:
 
 class LimitChecker
 {
-	private:
-		float type;
-		float lowerLimt;
-		float upperLimit;
-		AlertAbstract *alert;
+private:
+	const char* type;
+	float lowerLimit;
+	float upperLimit;
 public:
+	LimitChecker(AlertAbstract *alert,const char* type, float value,float lowerLimit, float upperLimit) :
+		type(type),
+		lowerLimit(lowerLimit),
+		upperLimit(upperLimit)
+	{
+		this->Checker(alert, value);
+	}
 	bool isLow(float, float);
 	bool isHigh(float, float);
 	bool isInsideLimit(float, float, float);
+	void Checker(AlertAbstract*, float);
 
 };
 
 bool LimitChecker::isLow(float value, float lowerLimit)
 {
-	return(value <= lowerLimit);
+	return(value < lowerLimit);
 }
 bool LimitChecker::isHigh(float value, float upperLimit)
 {
-	return(value >= upperLimit);
+	return(value > upperLimit);
 }
 bool LimitChecker::isInsideLimit(float value, float lowerLimit, float upperLimit)
 {
 	return (value >= lowerLimit && value <= upperLimit);
 
 }
-
-class vital
+void LimitChecker::Checker(AlertAbstract *a,float value)
 {
-	
-	public:
-		void Checker(AlertAbstract*, const char*,float,float,float);
-
-
-};
-
-
-void vital::Checker(AlertAbstract *a, const char* type ,float value,float lowerLimit, float  upperLimit)
-{
-	LimitChecker lm;
-	if (lm.isHigh(value, upperLimit))
-		a->raiseAlert(type, "HIGH");
-	else if(lm.isLow(value, lowerLimit))
-		a->raiseAlert(type, "LOW");
-
-
+	if (this->isHigh(value, this->upperLimit))
+		a->raiseAlert(this->type, "HIGH");
+	else if (this->isLow(value, this->lowerLimit))
+		a->raiseAlert(this->type, "LOW");
 }
 
+
+class vitalIntegrator
+{
+	LimitChecker bpmCheck, spo2Check, respRateCheck;
+public:
+	vitalIntegrator(AlertAbstract* alert, float bpm, float spo2, float respRate) :bpmCheck(alert,"bpm", bpm,70, 150),
+		spo2Check(alert,"spo2",spo2 ,90, 100),
+		respRateCheck(alert,"respRate", respRate,35, 90){}
+};
 int main() {
 
-	vital v;
+	
 	AlertAbstract *a = new AlertWithSMS;
-	v.Checker(a, "bpm", 30, 65, 150);
-
+	vitalIntegrator v(a,80,90,170);
 }
