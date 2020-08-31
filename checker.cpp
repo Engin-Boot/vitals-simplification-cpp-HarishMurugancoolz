@@ -1,6 +1,7 @@
 #include <iostream>
 #include <string>
-#include<vector>
+#include <iostream>
+#include <string>
 using namespace std;
 #include <assert.h>
 class AlertAbstract
@@ -26,20 +27,6 @@ public:
 		cout << "sound:" <<"person" <<" "<<id<<vitalName << " " << level << endl;
 	}
 };
-class AlertIntegrator : public AlertAbstract
-{
-private:
-	AlertWithSMS smsAlerter;
-	AlertWithSound soundAlerter;
-public:
-	void raiseAlert(string id,const char* vitalName, const char* level) override
-	{
-		smsAlerter.raiseAlert(id,vitalName, level);
-		soundAlerter.raiseAlert(id,vitalName, level);
-	}
-};
-
-
 class LimitChecker
 {
 private:
@@ -103,9 +90,9 @@ public:
 				
 
 	}
-	void checkAllVitals(vector<PersonsVital> p)
+	void checkAllVitals(PersonsVital p[],int n_persons)
 	{
-		for (unsigned int i_person = 0; i_person < p.size(); i_person++)
+		for (int i_person = 0; i_person <n_persons; i_person++)
 		{
 			bpmCheck.Checker(p[i_person].id, p[i_person].alert, p[i_person].vitalValue[0]);
 			spo2Check.Checker(p[i_person].id, p[i_person].alert, p[i_person].vitalValue[1]);
@@ -115,9 +102,9 @@ public:
 
 
 };
-vector<PersonsVital> getPersonDetails()
-{
-	vector<PersonsVital> p(2);
+
+int main() {
+	PersonsVital p[2];
 	for (int i = 0; i < 2; i++)
 	{
 		p[i].id = to_string(i + 1);
@@ -138,15 +125,11 @@ vector<PersonsVital> getPersonDetails()
 		cin >> p[i].vitalValue[1];
 		cout << "Enter the respRate value" << endl;
 		cin >> p[i].vitalValue[2];
-		
+
 
 	}
-	return p;
-}
-int main() {
-	vector<PersonsVital> p = getPersonDetails();
 	vitalIntegrator v1;
-	v1.checkAllVitals(p);
+	v1.checkAllVitals(p,2);
 	return 0;
 	
 
