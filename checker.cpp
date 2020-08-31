@@ -87,7 +87,7 @@ struct PersonsVital
 
 	string id;//id or name
 	AlertAbstract *alert;
-	vector<float> vitalValue;
+	float vitalValue[3];
 
 };
 
@@ -107,9 +107,9 @@ public:
 	{
 		for (unsigned int i_person = 0; i_person < p.size(); i_person++)
 		{
-			bpmCheck.Checker(p[i_person].id, p[i_person].alert, p[i_person].vitalValue.at(0));
-			spo2Check.Checker(p[i_person].id, p[i_person].alert, p[i_person].vitalValue.at(1));
-			respRateCheck.Checker(p[i_person].id, p[i_person].alert, p[i_person].vitalValue.at(2));
+			bpmCheck.Checker(p[i_person].id, p[i_person].alert, p[i_person].vitalValue[0]);
+			spo2Check.Checker(p[i_person].id, p[i_person].alert, p[i_person].vitalValue[1]);
+			respRateCheck.Checker(p[i_person].id, p[i_person].alert, p[i_person].vitalValue[2]);
 		}
 	}
 
@@ -121,7 +121,7 @@ vector<PersonsVital> getPersonDetails()
 	for (int i = 0; i < 2; i++)
 	{
 		p[i].id = to_string(i + 1);
-		cout << "Enter the Alert type integer 0:AlertWithSms 1:AlertWithSound 2:alert with sound and sms" << endl;
+		cout << "Enter the Alert type integer 0:AlertWithSms 1:AlertWithSound 2" << endl;
 		int alert;
 		cin >> alert;
 		if (alert == 0)
@@ -132,21 +132,12 @@ vector<PersonsVital> getPersonDetails()
 		{
 			p[i].alert = new AlertWithSound;
 		}
-		else if (alert == 2)
-		{
-			p[i].alert = new AlertIntegrator;
-		}
-
-		float bpm, spo2, respRate;
 		cout << "Enter the Bpm value" << endl;
-		cin >> bpm;
-		p[i].vitalValue.push_back(bpm);
+		cin >> p[i].vitalValue[0];
 		cout << "Enter the spo2 value" << endl;
-		cin >> spo2;
-		p[i].vitalValue.push_back(spo2);
+		cin >> p[i].vitalValue[1];
 		cout << "Enter the respRate value" << endl;
-		cin >> respRate;
-		p[i].vitalValue.push_back(respRate);
+		cin >> p[i].vitalValue[2];
 		
 
 	}
