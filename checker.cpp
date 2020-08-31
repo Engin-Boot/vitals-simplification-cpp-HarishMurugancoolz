@@ -1,5 +1,6 @@
 #include <iostream>
 #include <string>
+#include<vector>
 using namespace std;
 #include <assert.h>
 class AlertAbstract
@@ -25,6 +26,19 @@ public:
 		cout << "sound:" <<"person" <<" "<<id<<vitalName << " " << level << endl;
 	}
 };
+class AlertIntegrator : public AlertAbstract
+{
+private:
+	AlertWithSMS smsAlerter;
+	AlertWithSound soundAlerter;
+public:
+	void raiseAlert(string id,const char* vitalName, const char* level) override
+	{
+		smsAlerter.raiseAlert(id,vitalName, level);
+		soundAlerter.raiseAlert(id,vitalName, level);
+	}
+};
+
 
 class LimitChecker
 {
@@ -73,9 +87,7 @@ struct PersonsVital
 
 	string id;//id or name
 	AlertAbstract *alert;
-	float bpmValue;
-	float spo2Value;
-	float respRateValue;
+	vector<float> vitalValue;
 
 };
 
@@ -83,55 +95,59 @@ class vitalIntegrator
 {
 	LimitChecker bpmCheck, spo2Check, respRateCheck;
 public:
-	vitalIntegrator():bpmCheck("bpm",70, 150),
-		spo2Check("spo2",90, 100),
+	vitalIntegrator():bpmCheck("bpm",70,150),
+		spo2Check("spo2",90,100),
 		respRateCheck("respRate",35,90)
 		
 	{
-		
 				
 
 	}
-	void checkAllVitals(PersonsVital p[], int n_person)
+	void checkAllVitals(vector<PersonsVital> p)
 	{
-		for (int i_person = 0; i_person < n_person; i_person++)
+		for (unsigned int i_person = 0; i_person < p.size(); i_person++)
 		{
-			bpmCheck.Checker(p[i_person].id, p[i_person].alert, p[i_person].bpmValue);
-			spo2Check.Checker(p[i_person].id, p[i_person].alert, p[i_person].spo2Value);
-			respRateCheck.Checker(p[i_person].id, p[i_person].alert, p[i_person].bpmValue);
+			bpmCheck.Checker(p[i_person].id, p[i_person].alert, p[i_person].vitalValue.at(0));
+			spo2Check.Checker(p[i_person].id, p[i_person].alert, p[i_person].vitalValue.at(1));
+			respRateCheck.Checker(p[i_person].id, p[i_person].alert, p[i_person].vitalValue.at(2));
 		}
 	}
 
 
 };
 int main() {
-	PersonsVital p[2];
+	vector<PersonsVital> p(2);
 	for (int i = 0; i < 2; i++)
 	{
 		p[i].id = to_string(i+1);
-		cout << "Enter the Alert type integer 0:AlertWithSms 1:AlertWithSound" << endl;
+		cout << "Enter the Alert type integer 0:AlertWithSms 1:AlertWithSound 2:alert with sound and sms" << endl;
 		int alert;
 		cin >> alert;
 		if (alert == 0)
 		{
 			p[i].alert = new AlertWithSMS;
 		}
-		else
+		else if(alert==1)
 		{
 			p[i].alert = new AlertWithSound;
 		}
+		else if(alert==2)
+		{
+			p[i].alert = new AlertIntegrator;
+		}
 
+		float bpm, spo2, respRate;
 		cout << "Enter the Bpm value" << endl;
-		cin >> p[i].bpmValue;
+		cin >> bpm;
+		p[i].vitalValue.push_back(bpm);
 		cout << "Enter the spo2 value" << endl;
-		cin >> p[i].spo2Value;
+		cin >> spo2;
+		p[i].vitalValue.push_back(spo2);
 		cout << "Enter the respRate value" << endl;
-		cin >> p[i].respRateValue;
+		cin >> respRate;
+		p[i].vitalValue.push_back(respRate);
 		
 	}
 	vitalIntegrator v1;
-	v1.checkAllVitals(p, 2);
-	
-
-	
+	v1.checkAllVitals(p);
 }
