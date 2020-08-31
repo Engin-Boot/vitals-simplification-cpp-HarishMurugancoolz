@@ -115,7 +115,7 @@ int main() {
 		{
 			p[i].alert = new AlertWithSMS;
 		}
-		else if (alert == 1)
+		else
 		{
 			p[i].alert = new AlertWithSound;
 		}
