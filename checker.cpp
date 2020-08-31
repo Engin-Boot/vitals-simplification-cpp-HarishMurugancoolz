@@ -115,11 +115,12 @@ public:
 
 
 };
-int main() {
+vector<PersonsVital> getPersonDetails()
+{
 	vector<PersonsVital> p(2);
 	for (int i = 0; i < 2; i++)
 	{
-		p[i].id = to_string(i+1);
+		p[i].id = to_string(i + 1);
 		cout << "Enter the Alert type integer 0:AlertWithSms 1:AlertWithSound 2:alert with sound and sms" << endl;
 		int alert;
 		cin >> alert;
@@ -127,11 +128,11 @@ int main() {
 		{
 			p[i].alert = new AlertWithSMS;
 		}
-		else if(alert==1)
+		else if (alert == 1)
 		{
 			p[i].alert = new AlertWithSound;
 		}
-		else if(alert==2)
+		else if (alert == 2)
 		{
 			p[i].alert = new AlertIntegrator;
 		}
@@ -147,7 +148,16 @@ int main() {
 		cin >> respRate;
 		p[i].vitalValue.push_back(respRate);
 		
+
 	}
+	return p;
+}
+int main() {
+	vector<PersonsVital> p = getPersonDetails();
 	vitalIntegrator v1;
 	v1.checkAllVitals(p);
+	return 0;
+	
+
+	
 }
